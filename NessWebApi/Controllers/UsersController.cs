@@ -25,8 +25,8 @@ namespace NessWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> GetUserById(Guid id)
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetUserById(int id)
         {
 
             var user = await _dbContextNessApp.Users.FindAsync(id);
@@ -45,15 +45,15 @@ namespace NessWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser([FromBody] User userRequest)
         {
-            userRequest.Id = Guid.NewGuid();
+      
             await _dbContextNessApp.Users.AddAsync(userRequest);
             await _dbContextNessApp.SaveChangesAsync();
             return Ok(userRequest);
         }
 
         [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, User updateUser)
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, User updateUser)
         {
 
             var userFind = await _dbContextNessApp.Users.FindAsync(id);
@@ -81,8 +81,8 @@ namespace NessWebApi.Controllers
 
 
         [HttpDelete]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
 
             var user = await _dbContextNessApp.Users.FindAsync(id);

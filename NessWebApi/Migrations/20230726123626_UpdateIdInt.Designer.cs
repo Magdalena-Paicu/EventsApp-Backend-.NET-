@@ -12,8 +12,8 @@ using NessWebApi.Data;
 namespace NessWebApi.Migrations
 {
     [DbContext(typeof(DbContextNessApp))]
-    [Migration("20230708210753_NumeMigrare")]
-    partial class NumeMigrare
+    [Migration("20230726123626_UpdateIdInt")]
+    partial class UpdateIdInt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace NessWebApi.Migrations
 
             modelBuilder.Entity("NessWebApi.Models.Event", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -111,9 +113,11 @@ namespace NessWebApi.Migrations
 
             modelBuilder.Entity("NessWebApi.Models.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");

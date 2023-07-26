@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BESvyG1MrVq0TpSEShT4Yad71TNQBITQB1S5SeeeGUo=",
+  "Hash": "RAiKW47cRriAos3Z0fr6xMJdcS4wgHfxRVbpY3YEPCw=",
   "Source": "NessWebApi",
   "BasePath": "_content/NessWebApi",
   "Mode": "Default",
@@ -15,23 +15,5 @@
       "Pattern": "**"
     }
   ],
-  "Assets": [
-    {
-      "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\WIN_20230713_22_30_08_Pro.jpg",
-      "SourceId": "NessWebApi",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\",
-      "BasePath": "_content/NessWebApi",
-      "RelativePath": "uploads/WIN_20230713_22_30_08_Pro.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\uploads\\WIN_20230713_22_30_08_Pro.jpg"
-    }
-  ]
+  "Assets": []
 }

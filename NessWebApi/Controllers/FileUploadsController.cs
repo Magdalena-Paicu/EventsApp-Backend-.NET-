@@ -104,17 +104,18 @@ namespace NessWebApi.Controllers
                     if (System.IO.File.Exists(path + fileName + ".jpg"))
                     {
                         System.IO.File.Delete(path + fileName + ".jpg");
-                        return Ok("Fișierul a fost șters cu succes.");
+
+                        return Ok("File deleted successfully.");
                     }
                     else if (System.IO.File.Exists(path + fileName + ".png"))
                     {
                         System.IO.File.Delete(path + fileName + ".png");
-                        return Ok("Fișierul a fost șters cu succes.");
+                        return Ok("File deleted successfully.");
                     }
                 }
                 else
                 {
-                    return NotFound("Fișierul nu a fost găsit în baza de date.");
+                    return NotFound("The file was not found in the database.");
                 }
             }
             catch (Exception ex)
