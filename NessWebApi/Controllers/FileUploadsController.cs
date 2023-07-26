@@ -115,7 +115,6 @@ namespace NessWebApi.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> GetAllImages()
         {
