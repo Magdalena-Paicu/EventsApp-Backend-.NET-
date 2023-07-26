@@ -9,6 +9,7 @@ namespace NessWebApi.Models
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsConfirmed { get; set; }
-   
+        public string ImageUrl { get; set; }
+
     }
 }

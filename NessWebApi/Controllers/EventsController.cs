@@ -38,49 +38,47 @@ namespace NessWebApi.Controllers
 
             return Ok(ev);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> CreateNewEvent([FromForm] Event newEvent, IFormFile file)
-        //{
-        //    if (file != null && file.Length > 0)
-        //    {
-        //        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-        //        if (!Directory.Exists(uploadsFolder))
-        //        {
-        //            Directory.CreateDirectory(uploadsFolder);
-        //        }
 
-        //        string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-        //        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+        [HttpPost]
+        public async Task<IActionResult> CreateNewEvent([FromForm] Event newEvent, IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
 
-        //        using (var stream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            await file.CopyToAsync(stream);
-        //        }
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-           
-        //        if (!_dbContextNessApp.Events.Any())
-        //        {
-        //            newEvent.Id = 0;
-        //        }
-        //        else
-        //        {
-        //            int maxExistingId = _dbContextNessApp.Events.Max(e => e.Id);
-        //            newEvent.Id = maxExistingId + 1;
-        //        }
-
-        //        newEvent.ImageUrl = "/uploads/" + uniqueFileName;
-
-        //        _dbContextNessApp.Events.Add(newEvent);
-        //        await _dbContextNessApp.SaveChangesAsync();
-
-        //        return Ok(newEvent);
-        //    }
-
-        //    return BadRequest("No file or file is empty.");
-        //}
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
 
 
+                if (!_dbContextNessApp.Events.Any())
+                {
+                    newEvent.Id = 0;
+                }
+                else
+                {
+                    int maxExistingId = _dbContextNessApp.Events.Max(e => e.Id);
+                    newEvent.Id = maxExistingId + 1;
+                }
 
+                newEvent.ImageUrl = "/uploads/" + uniqueFileName;
+
+                _dbContextNessApp.Events.Add(newEvent);
+                await _dbContextNessApp.SaveChangesAsync();
+
+                return Ok(newEvent);
+            }
+
+            return BadRequest("No file or file is empty.");
+        }
 
 
         [HttpPut("{id:int}")]
