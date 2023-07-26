@@ -69,35 +69,46 @@ namespace NessWebApi.Controllers
         public async Task<IActionResult> Get([FromRoute] string fileName)
         {
             string path = _webHostEnvironment.WebRootPath + "\\uploads\\";
-            var filePath = path + fileName + ".png";
-            if (System.IO.File.Exists(filePath))
+            var filePathPng = path + fileName + ".png";
+            var filePathJpg = path + fileName + ".jpg";
+
+            if (System.IO.File.Exists(filePathPng))
             {
-                byte[] b = System.IO.File.ReadAllBytes(filePath);
+                byte[] b = System.IO.File.ReadAllBytes(filePathPng);
                 return File(b, "image/png");
             }
-            return null;
+
+            if (System.IO.File.Exists(filePathJpg))
+            {
+                byte[] b = System.IO.File.ReadAllBytes(filePathJpg);
+                return File(b, "image/jpg");
+            }
+
+            return NotFound("Fișierul nu a fost găsit.");
         }
 
         [HttpDelete("delete/{fileName}")]
         public async Task<IActionResult> DeleteFile(string fileName)
         {
-            string path = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", fileName);
+            string path = _webHostEnvironment.WebRootPath + "\\uploads\\";
 
             try
             {
-                // Căutați înregistrarea în baza de date bazată pe numele fișierului
-                var uploadedFile = await _dbContextNessApp.UploadedFiles.FirstOrDefaultAsync(file => file.FileName == fileName);
+                var uploadedFile = await _dbContextNessApp.UploadedFiles.FirstOrDefaultAsync(file => file.FileName == fileName +".jpg" || file.FileName== fileName +".png");
 
                 if (uploadedFile != null)
                 {
-                    // Eliminați înregistrarea din baza de date
                     _dbContextNessApp.UploadedFiles.Remove(uploadedFile);
                     await _dbContextNessApp.SaveChangesAsync();
 
-                    if (System.IO.File.Exists(path))
+                    if (System.IO.File.Exists(path + fileName + ".jpg"))
                     {
-                        // Ștergeți fișierul fizic din folderul uploads
-                        System.IO.File.Delete(path);
+                        System.IO.File.Delete(path + fileName + ".jpg");
+                        return Ok("Fișierul a fost șters cu succes.");
+                    }
+                    else if (System.IO.File.Exists(path + fileName + ".png"))
+                    {
+                        System.IO.File.Delete(path + fileName + ".png");
                         return Ok("Fișierul a fost șters cu succes.");
                     }
                 }

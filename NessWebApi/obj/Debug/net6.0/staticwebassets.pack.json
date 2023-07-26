@@ -1,12 +1,8 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\56b53f1d-9674-44e6-8f77-e26217132208_README",
-      "PackagePath": "staticwebassets\\uploads"
-    },
-    {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\9577f968-0ea0-4219-8eb6-9d84c00a66e2_README",
-      "PackagePath": "staticwebassets\\uploads"
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\WIN_20230713_22_30_08_Pro.jpg",
+      "PackagePath": "staticwebassets\\uploads\\WIN_20230713_22_30_08_Pro.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.NessWebApi.Microsoft.AspNetCore.StaticWebAssets.props",
