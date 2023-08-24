@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NessWebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateIdInt : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,16 +23,16 @@ namespace NessWebApi.Migrations
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DurationHours = table.Column<int>(type: "int", nullable: false),
+                    DurationHours = table.Column<float>(type: "real", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     eventLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ticketLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isPetFriendly = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isKidFriendly = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isFree = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isDraft = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isFavorite = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    isPetFriendly = table.Column<bool>(type: "bit", nullable: false),
+                    isKidFriendly = table.Column<bool>(type: "bit", nullable: false),
+                    isFree = table.Column<bool>(type: "bit", nullable: false),
+                    isDraft = table.Column<bool>(type: "bit", nullable: false),
+                    isFavorite = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,8 +64,9 @@ namespace NessWebApi.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    IsConfirmed = table.Column<bool>(type: "bit", nullable: false)
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

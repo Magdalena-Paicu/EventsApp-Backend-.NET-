@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NessWebApi.Data;
@@ -39,12 +38,78 @@ namespace NessWebApi.Controllers
             return Ok(ev);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> CreateNewEvent([FromBody] Event newEvent)
+        public async Task<IActionResult> CreateEvent([FromBody] Event newEvent)
         {
-           await _dbContextNessApp.Events.AddAsync(newEvent); 
-           await _dbContextNessApp.SaveChangesAsync();
+            await _dbContextNessApp.Events.AddAsync(newEvent);
+            await _dbContextNessApp.SaveChangesAsync();
             return Ok(newEvent);
+        }
+
+        [HttpPost("images/{EventId}")]
+        public async Task<IActionResult> UploadImageForEvent([FromRoute] int EventId, [FromForm] FileUpload fileUpload)
+        {
+            try
+            {
+                if (fileUpload.files != null && fileUpload.files.Length > 0)
+                {
+                    string path = _webHostEnvironment.WebRootPath + "\\events-images\\";
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+
+                    string fileName = fileUpload.files.FileName;
+                    string extension = Path.GetExtension(fileUpload.files.FileName);
+                    string fullPath = Path.Combine(path, fileName + extension);
+
+                    using (FileStream fileStream = System.IO.File.Create(path + fileUpload.files.FileName))
+                    {
+                        fileUpload.files.CopyTo(fileStream);
+                        fileStream.Flush();
+                    }
+
+                    var eventSearch = await _dbContextNessApp.Events.FindAsync(EventId);
+
+                    if (eventSearch != null)
+                    {
+                        eventSearch.ImageUrl = fileName;
+                        await _dbContextNessApp.SaveChangesAsync();
+                    }
+
+                    else
+                    {
+                        return NotFound($"Event with ID {EventId} not found.");
+
+                    }
+
+
+                    var uploadedFile = new UploadedFile
+                    {
+                        FileName = fileUpload.files.FileName,
+                        UploadDateTime = DateTime.Now,
+                        FileSize = fileUpload.files.Length,
+                        ImageUrl = "/events-images/" + fileUpload.files.FileName
+                    };
+
+                    _dbContextNessApp.UploadedFiles.Add(uploadedFile);
+                    await _dbContextNessApp.SaveChangesAsync();
+
+
+                    return Ok("Upload Done !");
+                }
+                else
+                {
+                    return BadRequest("Image was not upload successfully!");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error.");
+            }
         }
 
 
@@ -58,7 +123,21 @@ namespace NessWebApi.Controllers
             }
 
             ev.Title = updateEvent.Title;
-            // Actualizează restul proprietăților evenimentului
+            ev.Address = updateEvent.Address;
+            ev.isPetFriendly = updateEvent.isPetFriendly;
+            ev.isKidFriendly = updateEvent.isKidFriendly;
+            ev.DurationHours = updateEvent.DurationHours;
+            ev.Author = updateEvent.Author;
+            ev.createdBy = updateEvent.createdBy;
+            ev.EndDateTime = updateEvent.EndDateTime;
+            ev.ImageUrl = updateEvent.ImageUrl;
+            ev.eventLink = updateEvent.eventLink;
+            ev.ticketLink = updateEvent.ticketLink;
+            ev.ImageUrl = updateEvent.ImageUrl;
+            ev.isDraft = updateEvent.isDraft;
+            ev.isFavorite = updateEvent.isFavorite;
+            ev.StartDateTime = updateEvent.StartDateTime;
+            ev.Location = updateEvent.Location;
 
             if (file != null && file.Length > 0)
             {
@@ -84,9 +163,11 @@ namespace NessWebApi.Controllers
             return Ok(ev);
         }
 
+
         [HttpDelete("{id:int}")]
 
-        public async Task<IActionResult> DeleteEvent(int id) {
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
             var ev = await _dbContextNessApp.Events.FindAsync(id);
             if (ev != null)
             {
@@ -97,5 +178,31 @@ namespace NessWebApi.Controllers
 
             return NotFound();
         }
+
+
+        //[HttpGet("{idEvent}")]
+        //public async Task<IActionResult> GetImage([FromRoute] int idEvent)
+        //{
+        //    string path = _webHostEnvironment.WebRootPath + "\\events-images\\";
+        //    var filePathPng = path + fileName + ".png";
+        //    var filePathJpg = path + fileName + ".jpg";
+
+        //    if (System.IO.File.Exists(filePathPng))
+        //    {
+        //        byte[] b = System.IO.File.ReadAllBytes(filePathPng);
+        //        return File(b, "image/png");
+        //    }
+
+        //    if (System.IO.File.Exists(filePathJpg))
+        //    {
+        //        byte[] b = System.IO.File.ReadAllBytes(filePathJpg);
+        //        return File(b, "image/jpg");
+        //    }
+
+        //    return NotFound("Fișierul nu a fost găsit.");
+        //}
+
+      
     }
+
 }

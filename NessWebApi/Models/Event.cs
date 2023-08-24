@@ -1,10 +1,13 @@
 ﻿using MessagePack;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace NessWebApi.Models
 {
     public class Event
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Title { get; set; }
 
@@ -18,7 +21,7 @@ namespace NessWebApi.Models
 
         public DateTime EndDateTime { get; set; }
 
-        public int DurationHours { get; set; }
+        public float DurationHours { get; set; }
 
         public string Address { get; set; }
 
@@ -28,15 +31,15 @@ namespace NessWebApi.Models
 
         public string createdBy { get; set; }
 
-        public string isPetFriendly { get; set; }
+        public bool isPetFriendly { get; set; }
 
-        public string isKidFriendly { get; set; }
+        public bool isKidFriendly { get; set; }
 
-        public string isFree { get; set; }  
+        public bool isFree { get; set; }  
 
-        public string isDraft { get; set; }
+        public bool isDraft { get; set; }
 
-        public string isFavorite { get; set; }
+        public bool isFavorite { get; set; }
 
 
     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NessWebApi.Data;
 using NessWebApi.Models;
@@ -10,10 +11,12 @@ namespace NessWebApi.Controllers
     public class UsersController : Controller
     {
         private readonly DbContextNessApp _dbContextNessApp;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public UsersController(DbContextNessApp dbContextNessApp)
+        public UsersController(DbContextNessApp dbContextNessApp, IWebHostEnvironment webHostEnvironment)
         {
             _dbContextNessApp = dbContextNessApp;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -28,7 +31,6 @@ namespace NessWebApi.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetUserById(int id)
         {
-
             var user = await _dbContextNessApp.Users.FindAsync(id);
 
             if (user != null)
@@ -37,18 +39,8 @@ namespace NessWebApi.Controllers
             }
             else
             {
-               return NotFound();
+                return NotFound();
             }
-
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddUser([FromBody] User userRequest)
-        {
-      
-            await _dbContextNessApp.Users.AddAsync(userRequest);
-            await _dbContextNessApp.SaveChangesAsync();
-            return Ok(userRequest);
         }
 
         [HttpPut]
@@ -64,8 +56,8 @@ namespace NessWebApi.Controllers
                 userFind.Email = updateUser.Email;
                 userFind.Username = updateUser.Username;
                 userFind.Password = updateUser.Password;
-                userFind.IsAdmin = updateUser.IsAdmin;
-                userFind.IsConfirmed = updateUser.IsConfirmed;
+                userFind.Token = updateUser.Token;
+                userFind.Role = updateUser.Role;
 
                 await _dbContextNessApp.SaveChangesAsync();
 
@@ -73,12 +65,9 @@ namespace NessWebApi.Controllers
             }
             else
             {
-
                 return NotFound();
             }
-
         }
-
 
         [HttpDelete]
         [Route("{id:int}")]
@@ -92,8 +81,31 @@ namespace NessWebApi.Controllers
                 await _dbContextNessApp.SaveChangesAsync();
                 return Ok(user);
             }
-
             return NotFound();
+        }
+
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] User userObj)
+        {
+            if (userObj == null)
+                return BadRequest();
+
+            var user = await _dbContextNessApp.Users.FirstOrDefaultAsync(x => x.Email == userObj.Email && x.Password == userObj.Password);
+            if (user == null)
+                return NotFound(new { Message = " User Not Found !" });
+            return Ok(new { Message = "Login Success !" });
+        }
+
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterUser([FromBody] User userObj)
+        {
+            if(userObj == null)
+                return BadRequest();    
+
+            await _dbContextNessApp.Users.AddAsync(userObj);
+            await _dbContextNessApp.SaveChangesAsync();
+            return Ok(new { Message = "User Register !", userObj });
         }
     }
 }

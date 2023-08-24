@@ -36,8 +36,8 @@ namespace NessWebApi.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationHours")
-                        .HasColumnType("int");
+                    b.Property<float>("DurationHours")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
@@ -60,20 +60,20 @@ namespace NessWebApi.Migrations
                     b.Property<string>("eventLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("isDraft")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isDraft")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isFavorite")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isFavorite")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isFree")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isFree")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isKidFriendly")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isKidFriendly")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isPetFriendly")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isPetFriendly")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ticketLink")
                         .HasColumnType("nvarchar(max)");
@@ -122,13 +122,13 @@ namespace NessWebApi.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")

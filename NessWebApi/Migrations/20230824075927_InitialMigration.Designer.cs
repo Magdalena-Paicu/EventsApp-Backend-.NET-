@@ -12,8 +12,8 @@ using NessWebApi.Data;
 namespace NessWebApi.Migrations
 {
     [DbContext(typeof(DbContextNessApp))]
-    [Migration("20230726123626_UpdateIdInt")]
-    partial class UpdateIdInt
+    [Migration("20230824075927_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,8 +39,8 @@ namespace NessWebApi.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DurationHours")
-                        .HasColumnType("int");
+                    b.Property<float>("DurationHours")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
@@ -63,20 +63,20 @@ namespace NessWebApi.Migrations
                     b.Property<string>("eventLink")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("isDraft")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isDraft")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isFavorite")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isFavorite")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isFree")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isFree")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isKidFriendly")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isKidFriendly")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("isPetFriendly")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isPetFriendly")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ticketLink")
                         .HasColumnType("nvarchar(max)");
@@ -122,13 +122,16 @@ namespace NessWebApi.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
