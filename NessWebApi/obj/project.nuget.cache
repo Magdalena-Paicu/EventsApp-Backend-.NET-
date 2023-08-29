@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fjKHqDkh+Cjy+S5POkqSp8JRKB3XcEs8IfLSiJDTiadoP9PlBexjOWLTyeIOvmRy4hpxupIZWnZyvVgGhFjwrQ==",
+  "dgSpecHash": "vopRy8W1Vf94UhlHqSi8VFo2dpTDgGsaKiLGt08qizsOxoPfOcrrfEOFSTdApZu90wDlNIdgf2HhwHCjfE9kcg==",
   "success": true,
   "projectFilePath": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\NessWebApi.csproj",
   "expectedPackageFiles": [
@@ -60,6 +60,7 @@
     "C:\\Users\\P3720159\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
     "C:\\Users\\P3720159\\.nuget\\packages\\messagepack.annotations\\2.1.152\\messagepack.annotations.2.1.152.nupkg.sha512",
     "C:\\Users\\P3720159\\.nuget\\packages\\messagepackanalyzer\\2.1.152\\messagepackanalyzer.2.1.152.nupkg.sha512",
+    "C:\\Users\\P3720159\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.0\\microsoft.aspnetcore.authentication.jwtbearer.6.0.0.nupkg.sha512",
     "C:\\Users\\P3720159\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\P3720159\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\P3720159\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",

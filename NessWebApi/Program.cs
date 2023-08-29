@@ -3,6 +3,10 @@ using NessWebApi.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using NessWebApi.Controllers;
 using NessWebApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +17,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
- builder.Services.AddDbContext<DbContextNessApp>(options =>                                
- options.UseSqlServer(builder.Configuration.GetConnectionString("NessAppConnectionString")));
+builder.Services.AddDbContext<DbContextNessApp>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("NessAppConnectionString")));
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("veryverysecret...")),
+        ValidateAudience = false,
+        ValidateIssuer = false
+    };
+}
+);
 
 var app = builder.Build();
 
