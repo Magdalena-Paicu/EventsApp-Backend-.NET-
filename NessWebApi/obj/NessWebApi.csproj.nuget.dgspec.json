@@ -71,6 +71,14 @@
               "target": "Package",
               "version": "[6.0.14, )"
             },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Smtp-Emailer": {
+              "target": "Package",
+              "version": "[0.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"

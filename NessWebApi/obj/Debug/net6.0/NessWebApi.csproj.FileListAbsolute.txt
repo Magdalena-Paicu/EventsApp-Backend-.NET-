@@ -591,3 +591,7 @@ C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\o
 C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\obj\Debug\net6.0\NessWebApi.genruntimeconfig.cache
 C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\obj\Debug\net6.0\ref\NessWebApi.dll
 C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\bin\Debug\net6.0\MailKit.dll
+C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\bin\Debug\net6.0\MimeKit.dll
+C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\bin\Debug\net6.0\NETCore.MailKit.dll
+C:\Users\P3720159\Desktop\NessLab\NessLabs\.NET-Ness-API\NessWebApi\NessWebApi\bin\Debug\net6.0\BouncyCastle.Crypto.dll

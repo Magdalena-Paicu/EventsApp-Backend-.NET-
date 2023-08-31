@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
+using NessWebApi.UtilityService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DbContextNessApp>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("NessAppConnectionString")));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddAuthentication(x =>
 {
