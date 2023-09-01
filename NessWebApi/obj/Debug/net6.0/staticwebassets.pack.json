@@ -1,32 +1,20 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\galeri.jpg",
-      "PackagePath": "staticwebassets\\events-images\\galeri.jpg"
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\1.jpg",
+      "PackagePath": "staticwebassets\\events-images\\1.jpg"
     },
     {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\magda3.jpg",
-      "PackagePath": "staticwebassets\\events-images\\magda3.jpg"
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\2.jpg",
+      "PackagePath": "staticwebassets\\events-images\\2.jpg"
     },
     {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\magda4.jpg",
-      "PackagePath": "staticwebassets\\events-images\\magda4.jpg"
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\3.jpg",
+      "PackagePath": "staticwebassets\\events-images\\3.jpg"
     },
     {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\music-festival.jpg",
-      "PackagePath": "staticwebassets\\events-images\\music-festival.jpg"
-    },
-    {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\park1.jpg",
-      "PackagePath": "staticwebassets\\events-images\\park1.jpg"
-    },
-    {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\park2.jpg",
-      "PackagePath": "staticwebassets\\events-images\\park2.jpg"
-    },
-    {
-      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\sport.jpg",
-      "PackagePath": "staticwebassets\\events-images\\sport.jpg"
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\1.jpg",
+      "PackagePath": "staticwebassets\\uploads\\1.jpg"
     },
     {
       "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\uploads\\magda1.jpg",

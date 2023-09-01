@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -177,7 +175,7 @@ namespace NessWebApi.Controllers
                 return NotFound(new
                 {
                   StatusCode=404,
-                  Message ="email Doesn't Exist "
+                  Message ="Email doesn't exist "
                 });
             }
             var tokenBytes = RandomNumberGenerator.GetBytes(64);
@@ -200,7 +198,8 @@ namespace NessWebApi.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
             var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
-            var user = await _dbContextNessApp.Users.AsNoTracking().FirstOrDefaultAsync(a=>a.Email ==resetPasswordDto.Email);
+            var user = await _dbContextNessApp.Users.AsNoTracking().FirstOrDefaultAsync(a=>a.Email == resetPasswordDto.Email);
+            if (user == null)
             {
                 return NotFound(new
                 {
@@ -218,7 +217,6 @@ namespace NessWebApi.Controllers
                     Message ="Invalid Reset link"
                 });
             }
-
             user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
             _dbContextNessApp.Entry(user).State =EntityState.Modified;
             await _dbContextNessApp.SaveChangesAsync();
