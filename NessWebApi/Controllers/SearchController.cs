@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using NessWebApi.Data;
 using NessWebApi.Models;
 
@@ -16,19 +17,42 @@ namespace NessWebApi.Controllers
             _dbContextNessApp = dbContextNessApp;
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> SearchUsers (string searching)
+        [HttpGet("searchByTitle")]
+        public async Task<IActionResult> SearchEventsByTitle(string title)
         {
-            if(string.IsNullOrEmpty(searching))
+            if (string.IsNullOrEmpty(title))
             {
-                var allUsers= await _dbContextNessApp.Users.ToListAsync();
-                return Ok(allUsers);
+                var allEvents = await _dbContextNessApp.Events.ToListAsync();
+                return Ok(allEvents);
             }
-            
-            var matchingUsers = await _dbContextNessApp.Users.Where(x => x.Username.Contains(searching)).ToListAsync();
+            else
+            {
+                var matchingEvents = await _dbContextNessApp.Events.Where(x => x.Title.Contains(title)).ToListAsync();
+                return Ok(matchingEvents);
+            }
+        }
 
-            return Ok(matchingUsers);
+        [HttpGet("searchIsFree")]
+        public async Task<IActionResult> SearchEventsFree([FromQuery] bool isFree)
+        {
+            try
+            {
+                var allEventsFree = await _dbContextNessApp.Events.Where(x => x.isFree == isFree).ToListAsync();
+                if (allEventsFree.Any())
+                {
+                    return Ok(allEventsFree);
+                }
+                else
+                {
+                    return NotFound(" Nu s-au gasit elementele corespunzatoare !");
+                }
+            }
+            catch (Exception exception)
+            {
+                return StatusCode(500, "A aparut o eroare in timpul cautarii evenimentelor.");
+            }
+
+
         }
     }
 }

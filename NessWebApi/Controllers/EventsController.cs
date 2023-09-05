@@ -34,7 +34,6 @@ namespace NessWebApi.Controllers
             {
                 return NotFound();
             }
-
             return Ok(ev);
         }
 
@@ -60,8 +59,6 @@ namespace NessWebApi.Controllers
                     {
                         Directory.CreateDirectory(path);
                     }
-
-
                     string fileName = fileUpload.files.FileName;
                     string extension = Path.GetExtension(fileUpload.files.FileName);
                     string fullPath = Path.Combine(path, fileName + extension);
@@ -71,22 +68,17 @@ namespace NessWebApi.Controllers
                         fileUpload.files.CopyTo(fileStream);
                         fileStream.Flush();
                     }
-
                     var eventSearch = await _dbContextNessApp.Events.FindAsync(EventId);
-
                     if (eventSearch != null)
                     {
                         eventSearch.ImageUrl = fileName;
                         await _dbContextNessApp.SaveChangesAsync();
                     }
-
                     else
                     {
                         return NotFound($"Event with ID {EventId} not found.");
 
                     }
-
-
                     var uploadedFile = new UploadedFile
                     {
                         FileName = fileUpload.files.FileName,
@@ -94,11 +86,8 @@ namespace NessWebApi.Controllers
                         FileSize = fileUpload.files.Length,
                         ImageUrl = "/events-images/" + fileUpload.files.FileName
                     };
-
                     _dbContextNessApp.UploadedFiles.Add(uploadedFile);
                     await _dbContextNessApp.SaveChangesAsync();
-
-
                     return Ok("Upload Done !");
                 }
                 else
@@ -146,7 +135,6 @@ namespace NessWebApi.Controllers
                 {
                     Directory.CreateDirectory(uploadsFolder);
                 }
-
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -154,12 +142,9 @@ namespace NessWebApi.Controllers
                 {
                     await file.CopyToAsync(stream);
                 }
-
                 ev.ImageUrl = "/uploads/" + uniqueFileName;
             }
-
             await _dbContextNessApp.SaveChangesAsync();
-
             return Ok(ev);
         }
 
@@ -175,7 +160,6 @@ namespace NessWebApi.Controllers
                 await _dbContextNessApp.SaveChangesAsync();
                 return Ok(ev);
             }
-
             return NotFound();
         }
 
