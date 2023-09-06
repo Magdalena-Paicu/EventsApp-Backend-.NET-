@@ -108,7 +108,6 @@ namespace NessWebApi.Controllers
         }
 
 
-
         [HttpDelete("delete/{fileName}")]
         public async Task<IActionResult> DeleteFile(string fileName)
         {

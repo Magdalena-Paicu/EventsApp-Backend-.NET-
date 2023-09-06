@@ -51,8 +51,25 @@ namespace NessWebApi.Controllers
             {
                 return StatusCode(500, "A aparut o eroare in timpul cautarii evenimentelor.");
             }
+        }
 
+        [HttpGet("searchWithTicket")]
+        public async Task<IActionResult> SearchEventsWithTicket([FromQuery] bool withTicket)
+        {
+            try
+            {
+                var matchingEvents = await _dbContextNessApp.Events.Where(x => x.withTicket == withTicket).ToListAsync();
+                if (matchingEvents.Any())
+                {
+                    return Ok(matchingEvents);
+                }
+                else { return NotFound(" Nu s-au gasit elementele corespunzatoare !"); }
 
+            }
+            catch (Exception exception)
+            {
+                return StatusCode(500, "Aaparut o eroare in timpul cautarii evenimentelor. ");
+            }
         }
     }
 }

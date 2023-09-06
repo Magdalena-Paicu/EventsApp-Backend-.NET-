@@ -36,6 +36,7 @@ namespace NessWebApi.Models
         public bool isKidFriendly { get; set; }
 
         public bool isFree { get; set; }  
+        public bool withTicket { get; set; }    
 
         public bool isDraft { get; set; }
 
