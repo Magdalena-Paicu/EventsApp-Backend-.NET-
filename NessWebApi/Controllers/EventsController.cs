@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NessWebApi.Data;
 using NessWebApi.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace NessWebApi.Controllers
 {
@@ -19,6 +21,7 @@ namespace NessWebApi.Controllers
             _dbContextNessApp = dbContextNessApp;
         }
 
+    
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
@@ -124,7 +127,6 @@ namespace NessWebApi.Controllers
             ev.ticketLink = updateEvent.ticketLink;
             ev.ImageUrl = updateEvent.ImageUrl;
             ev.isDraft = updateEvent.isDraft;
-            ev.isFavorite = updateEvent.isFavorite;
             ev.StartDateTime = updateEvent.StartDateTime;
             ev.Location = updateEvent.Location;
 
@@ -162,31 +164,5 @@ namespace NessWebApi.Controllers
             }
             return NotFound();
         }
-
-
-        //[HttpGet("{idEvent}")]
-        //public async Task<IActionResult> GetImage([FromRoute] int idEvent)
-        //{
-        //    string path = _webHostEnvironment.WebRootPath + "\\events-images\\";
-        //    var filePathPng = path + fileName + ".png";
-        //    var filePathJpg = path + fileName + ".jpg";
-
-        //    if (System.IO.File.Exists(filePathPng))
-        //    {
-        //        byte[] b = System.IO.File.ReadAllBytes(filePathPng);
-        //        return File(b, "image/png");
-        //    }
-
-        //    if (System.IO.File.Exists(filePathJpg))
-        //    {
-        //        byte[] b = System.IO.File.ReadAllBytes(filePathJpg);
-        //        return File(b, "image/jpg");
-        //    }
-
-        //    return NotFound("Fișierul nu a fost găsit.");
-        //}
-
-
     }
-
 }

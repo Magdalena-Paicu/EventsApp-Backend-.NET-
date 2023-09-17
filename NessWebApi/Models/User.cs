@@ -12,6 +12,7 @@ namespace NessWebApi.Models
         public string ImageUrl { get; set; }
         public string? ResetPasswordToken { get; set; }
         public DateTime ResetPasswordExpiry { get; set; }
+        public List<Event>FavoriteEvents { get; set; } = new List<Event>();
 
     }
 }

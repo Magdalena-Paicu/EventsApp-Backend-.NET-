@@ -54,6 +54,9 @@ namespace NessWebApi.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -61,9 +64,6 @@ namespace NessWebApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("isDraft")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isFavorite")
                         .HasColumnType("bit");
 
                     b.Property<bool>("isFree")
@@ -82,6 +82,8 @@ namespace NessWebApi.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Events");
                 });
@@ -146,6 +148,60 @@ namespace NessWebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("NessWebApi.Models.UserFavoriteEvents", b =>
+                {
+                    b.Property<int>("UserFavoriteEventsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserFavoriteEventsId"));
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserFavoriteEventsId");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFavoriteEvents");
+                });
+
+            modelBuilder.Entity("NessWebApi.Models.Event", b =>
+                {
+                    b.HasOne("NessWebApi.Models.User", null)
+                        .WithMany("FavoriteEvents")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("NessWebApi.Models.UserFavoriteEvents", b =>
+                {
+                    b.HasOne("NessWebApi.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NessWebApi.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NessWebApi.Models.User", b =>
+                {
+                    b.Navigation("FavoriteEvents");
                 });
 #pragma warning restore 612, 618
         }

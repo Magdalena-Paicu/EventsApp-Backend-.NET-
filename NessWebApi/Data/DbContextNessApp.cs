@@ -13,5 +13,7 @@ namespace NessWebApi.Data
         public DbSet<Event> Events { get; set; }
 
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+
+        public DbSet<UserFavoriteEvents> UserFavoriteEvents { get; set; }
     }
 }

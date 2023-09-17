@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NessWebApi.Data;
@@ -31,11 +33,13 @@ namespace NessWebApi.Controllers
             _emailService = emailService;
         }
 
-        [Authorize]
+
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _dbContextNessApp.Users.ToListAsync();
+            var users = await _dbContextNessApp.Users
+                .Include(u => u.FavoriteEvents)
+                .ToListAsync();
 
             return Ok(users);
         }
@@ -71,9 +75,7 @@ namespace NessWebApi.Controllers
                 userFind.Password = updateUser.Password;
                 userFind.Token = updateUser.Token;
                 userFind.Role = updateUser.Role;
-
                 await _dbContextNessApp.SaveChangesAsync();
-
                 return Ok(updateUser);
             }
             else
@@ -98,7 +100,7 @@ namespace NessWebApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] User userObj)
+        public async Task<IActionResult> Authenticate([FromBody] UserLoginDto userObj)
         {
             if (userObj == null)
                 return BadRequest();
@@ -111,12 +113,18 @@ namespace NessWebApi.Controllers
             {
                 return BadRequest(new { Message = "Incorrect Password" });
             }
-            user.Token = CreateJwt(user);
 
-            return Ok(new { Message = "Login Success !" ,
-            Token = user.Token
+            var token = CreateJwt(user);
+            user.Token = token;
+            await _dbContextNessApp.SaveChangesAsync();
+
+            return Ok(new
+            {
+                Message = "Login Success !",
+                Token = token
             });
         }
+
 
 
         [HttpPost("register")]
@@ -124,8 +132,10 @@ namespace NessWebApi.Controllers
         {
             if (userObj == null)
                 return BadRequest();
+
             if (await EmailAlreadyExistsAsync(userObj.Email)) return BadRequest(new { Message = "Email already exists !" });
             if (await UsernameAlreadyExistsAsync(userObj.Username)) return BadRequest(new { Message = "Username already exists !" });
+
             userObj.Password = PasswordHasher.HashPassword(userObj.Password);
             userObj.Role = "User";
             userObj.Token = "";
@@ -134,11 +144,11 @@ namespace NessWebApi.Controllers
             return Ok(new { Message = "User Register !", userObj });
         }
 
-        private Task<bool> EmailAlreadyExistsAsync(string email) 
+        private Task<bool> EmailAlreadyExistsAsync(string email)
           => _dbContextNessApp.Users.AnyAsync(x => x.Email == email);
-       
 
-        private  Task<bool> UsernameAlreadyExistsAsync(string username)
+
+        private Task<bool> UsernameAlreadyExistsAsync(string username)
         {
             return _dbContextNessApp.Users.AnyAsync(x => x.Username == username);
         }
@@ -147,25 +157,26 @@ namespace NessWebApi.Controllers
         //}
 
         private string CreateJwt(User user)
-        { 
-         var jwtTokenHandler = new JwtSecurityTokenHandler();
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("veryverysecret...");
             var identity = new ClaimsIdentity(new Claim[]
                 {
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim(ClaimTypes.Email, user.Email)
                 });
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms .HmacSha256);
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-               Subject = identity,
-               Expires = DateTime.Now.AddDays(1),
-               SigningCredentials = credentials,
+                Subject = identity,
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = credentials,
             };
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
         }
+
         [HttpPost("send-email/{email}")]
         public async Task<IActionResult> SendEmail(string email)
         {
@@ -174,8 +185,8 @@ namespace NessWebApi.Controllers
             {
                 return NotFound(new
                 {
-                  StatusCode=404,
-                  Message ="Email doesn't exist "
+                    StatusCode = 404,
+                    Message = "Email doesn't exist "
                 });
             }
             var tokenBytes = RandomNumberGenerator.GetBytes(64);
@@ -189,8 +200,8 @@ namespace NessWebApi.Controllers
             await _dbContextNessApp.SaveChangesAsync();
             return Ok(new
             {
-                StatusCode=200,
-                Message ="Email Sent !"
+                StatusCode = 200,
+                Message = "Email Sent !"
             });
         }
 
@@ -198,34 +209,157 @@ namespace NessWebApi.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
             var newToken = resetPasswordDto.EmailToken.Replace(" ", "+");
-            var user = await _dbContextNessApp.Users.AsNoTracking().FirstOrDefaultAsync(a=>a.Email == resetPasswordDto.Email);
+            var user = await _dbContextNessApp.Users.AsNoTracking().FirstOrDefaultAsync(a => a.Email == resetPasswordDto.Email);
             if (user == null)
             {
                 return NotFound(new
                 {
-                    StatusCode =404,
+                    StatusCode = 404,
                     Message = "User Doesn't Exist "
                 });
             }
             var tokenCode = user.ResetPasswordToken;
             DateTime emailTokenExpiry = user.ResetPasswordExpiry;
-            if(tokenCode !=resetPasswordDto.EmailToken || emailTokenExpiry<DateTime.Now)
+            if (tokenCode != resetPasswordDto.EmailToken || emailTokenExpiry < DateTime.Now)
             {
                 return BadRequest(new
                 {
                     StatusCode = 400,
-                    Message ="Invalid Reset link"
+                    Message = "Invalid Reset link"
                 });
             }
             user.Password = PasswordHasher.HashPassword(resetPasswordDto.NewPassword);
-            _dbContextNessApp.Entry(user).State =EntityState.Modified;
+            _dbContextNessApp.Entry(user).State = EntityState.Modified;
             await _dbContextNessApp.SaveChangesAsync();
             return Ok(new
             {
-                StatusCode =200,
+                StatusCode = 200,
                 Message = "Password Reset Successfully"
 
             });
+        }
+
+        [HttpPost("add-event/{eventId:int}")]
+        [Authorize]
+        public async Task<IActionResult> AddEventToUser(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                    .Include(u => u.FavoriteEvents)
+                    .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                var ev = await _dbContextNessApp.Events.FindAsync(eventId);
+
+                if (user == null || ev == null)
+                {
+                    return NotFound(new { Message = "User or Event Not Found!" });
+                }
+                if (user.FavoriteEvents.Any(e => e.Id == eventId))
+                {
+                    return BadRequest(new { Message = "Event is already added to the user!" });
+                }
+
+                user.FavoriteEvents.Add(ev);
+                await _dbContextNessApp.SaveChangesAsync();
+
+                return Ok(new { Message = "Event added to user successfully!", Event = ev });
+            }
+            else
+            {
+                return NotFound(new { Message = "Email claim not found." });
+            }
+        }
+
+        [HttpDelete("delete-event/{eventId:int}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteEventToUser(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                   .Include(u => u.FavoriteEvents)
+                   .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                var ev = await _dbContextNessApp.Events.FindAsync(eventId);
+
+                if (user == null || ev == null)
+                {
+                    return NotFound(new { Message = "User or Event was Not Found !" });
+                }
+
+                if (user.FavoriteEvents.Any(e => e.Id == eventId))
+                {
+                    user.FavoriteEvents.Remove(ev);
+
+                }
+                await _dbContextNessApp.SaveChangesAsync();
+
+                return Ok(new { Message = "Event deleted to user successfully!" });
+            }
+
+            else
+            {
+                return
+                    NotFound(new { Message = "Email claim not found !" });
+            }
+        }
+
+        [HttpGet("get-favorite-events")]
+        [Authorize]
+        public async Task<IActionResult> GetFavoriteEvents()
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                  .Include(u => u.FavoriteEvents)
+                  .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                if (user != null)
+                {
+                    var favoriteEvents = user.FavoriteEvents.ToList();
+                    return Ok(favoriteEvents);
+                }
+                else
+                {
+                    return NotFound(new { Message = "Userul nu s-a gasit !" });
+                }
+            }
+            else
+            {
+                return Unauthorized(new { Message = "Unauthorized access." });
+            }
+        }
+
+        [HttpGet("is-element-favorite")]
+        public async Task<bool> IsEventsFavorite(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                 .Include(u => u.FavoriteEvents)
+                 .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                if (user != null)
+                {
+                    return user.FavoriteEvents.Any(ev => ev.Id == eventId);
+                }
+            }
+            return false;
         }
     }
 }
