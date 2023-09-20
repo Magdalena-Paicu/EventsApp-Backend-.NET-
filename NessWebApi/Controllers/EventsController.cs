@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NessWebApi.Data;
 using NessWebApi.Models;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Security.Claims;
 
 namespace NessWebApi.Controllers
 {
@@ -21,7 +21,7 @@ namespace NessWebApi.Controllers
             _dbContextNessApp = dbContextNessApp;
         }
 
-    
+
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
@@ -105,8 +105,9 @@ namespace NessWebApi.Controllers
         }
 
 
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateEvent(int id, [FromForm] Event updateEvent, IFormFile file)
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateEvent([FromRoute]int id, Event updateEvent, IFormFile file)
         {
             var ev = await _dbContextNessApp.Events.FindAsync(id);
             if (ev == null)
@@ -129,6 +130,7 @@ namespace NessWebApi.Controllers
             ev.isDraft = updateEvent.isDraft;
             ev.StartDateTime = updateEvent.StartDateTime;
             ev.Location = updateEvent.Location;
+            ev.withTicket = updateEvent.withTicket;
 
             if (file != null && file.Length > 0)
             {
@@ -146,13 +148,13 @@ namespace NessWebApi.Controllers
                 }
                 ev.ImageUrl = "/uploads/" + uniqueFileName;
             }
+
             await _dbContextNessApp.SaveChangesAsync();
             return Ok(ev);
         }
 
 
         [HttpDelete("{id:int}")]
-
         public async Task<IActionResult> DeleteEvent(int id)
         {
             var ev = await _dbContextNessApp.Events.FindAsync(id);
@@ -164,5 +166,92 @@ namespace NessWebApi.Controllers
             }
             return NotFound();
         }
+
+        [HttpPatch]
+        public async Task<IActionResult> ChangeTitleForEvent(int eventId, string titleChanged)
+        {
+            var ev = _dbContextNessApp.Events.FirstOrDefault(ev => ev.Id == eventId);
+            if (ev != null)
+            {
+                ev.Title = titleChanged;
+                await _dbContextNessApp.SaveChangesAsync();
+                return Ok(new { Message ="The title changed successfully !"});
+            };
+            return NotFound();
+        }
+
+        [HttpPost("add-event/{eventId:int}")]
+        [Authorize]
+        public async Task<IActionResult> AddEventToUser(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                    .Include(u => u.FavoriteEvents)
+                    .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                var ev = await _dbContextNessApp.Events.FindAsync(eventId);
+
+                if (user == null || ev == null)
+                {
+                    return NotFound(new { Message = "User or Event Not Found!" });
+                }
+                if (user.FavoriteEvents.Any(e => e.Id == eventId))
+                {
+                    return BadRequest(new { Message = "Event is already added to the user!" });
+                }
+
+                user.FavoriteEvents.Add(ev);
+                await _dbContextNessApp.SaveChangesAsync();
+
+                return Ok(new { Message = "Event added to user successfully!", Event = ev });
+            }
+            else
+            {
+                return NotFound(new { Message = "Email claim not found." });
+            }
+        }
+
+        [HttpDelete("delete-event/{eventId:int}")]
+        [Authorize]
+
+        public async Task<IActionResult> DeleteEventForUser(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                   .Include(u => u.FavoriteEvents)
+                   .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                var ev = await _dbContextNessApp.Events.FindAsync(eventId);
+
+                if (user == null || ev == null)
+                {
+                    return NotFound(new { Message = "User or Event Not Found !" });
+                }
+
+                if (!(user.FavoriteEvents.Any(ev => ev.Id == eventId))){
+                    return BadRequest(new { Message = "Event is not in Favorite List !" });
+                }
+                user.FavoriteEvents.Remove(ev);
+                await _dbContextNessApp.SaveChangesAsync();
+
+                return Ok(new { Message = "Event deleted successfully !" });
+            }
+            else
+            {
+                return NotFound(new { Message = "Email claim not found ." });
+            }
+
+        }
+
     }
 }

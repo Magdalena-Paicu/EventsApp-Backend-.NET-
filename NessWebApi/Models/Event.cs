@@ -40,5 +40,6 @@ namespace NessWebApi.Models
 
         public bool isDraft { get; set; }
 
+        public bool isFavorite { get; set; }
     }
 }

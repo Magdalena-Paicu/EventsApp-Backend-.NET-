@@ -66,6 +66,9 @@ namespace NessWebApi.Migrations
                     b.Property<bool>("isDraft")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("isFavorite")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("isFree")
                         .HasColumnType("bit");
 
