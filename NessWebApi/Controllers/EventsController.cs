@@ -49,7 +49,7 @@ namespace NessWebApi.Controllers
             return Ok(newEvent);
         }
 
-        [HttpPost("images/{EventId}")]
+        [HttpPost("load-image/{EventId}")]
         public async Task<IActionResult> UploadImageForEvent([FromRoute] int EventId, [FromForm] FileUpload fileUpload)
         {
             try
@@ -251,6 +251,27 @@ namespace NessWebApi.Controllers
                 return NotFound(new { Message = "Email claim not found ." });
             }
 
+        }
+
+        [HttpGet("is-element-favorite")]
+        public async Task<bool> IsEventsFavorite(int eventId)
+        {
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+            if (emailClaim != null)
+            {
+                var userEmail = emailClaim.Value;
+
+                var user = await _dbContextNessApp.Users
+                 .Include(u => u.FavoriteEvents)
+                 .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+                if (user != null)
+                {
+                    return user.FavoriteEvents.Any(ev => ev.Id == eventId);
+
+                }
+            }
+            return false;
         }
 
     }

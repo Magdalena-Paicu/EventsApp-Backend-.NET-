@@ -9,6 +9,7 @@ using NessWebApi.Helper;
 using NessWebApi.Models;
 using NessWebApi.UtilityService;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -31,7 +32,6 @@ namespace NessWebApi.Controllers
             _configuration = configuration;
             _emailService = emailService;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
@@ -124,8 +124,6 @@ namespace NessWebApi.Controllers
             });
         }
 
-
-
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] User userObj)
         {
@@ -152,9 +150,6 @@ namespace NessWebApi.Controllers
             return _dbContextNessApp.Users.AnyAsync(x => x.Username == username);
         }
 
-        //private static string CheckPasswordStrength() {     // aici pot sa pun validare si pe backend ca sa nu ii dau fiece parola, ca si la frontend, fac validari pe AMBELE
-        //}
-
         private string CreateJwt(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -162,7 +157,7 @@ namespace NessWebApi.Controllers
             var identity = new ClaimsIdentity(new Claim[]
                 {
                 new Claim(ClaimTypes.Role, user.Role),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
                 });
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
 
@@ -238,7 +233,6 @@ namespace NessWebApi.Controllers
             });
         }
 
-
         [HttpGet("get-favorite-events")]
         [Authorize]
         public async Task<IActionResult> GetFavoriteEvents()
@@ -276,25 +270,101 @@ namespace NessWebApi.Controllers
         }
 
 
-        [HttpGet("is-element-favorite")]
-        public async Task<bool> IsEventsFavorite(int eventId)
+        [HttpPost("image-upload-user/{userId}")]
+        public async Task<IActionResult> UploadImageForUser([FromRoute] int userId, [FromForm] FileUpload fileUpload)
         {
-            var emailClaim = User.FindFirst(ClaimTypes.Email);
-            if (emailClaim != null)
+            try
             {
-                var userEmail = emailClaim.Value;
-
-                var user = await _dbContextNessApp.Users
-                 .Include(u => u.FavoriteEvents)
-                 .FirstOrDefaultAsync(u => u.Email == userEmail);
-
-                if (user != null)
+                if (fileUpload.files != null && fileUpload.files.Length > 0)
                 {
-                    return user.FavoriteEvents.Any(ev => ev.Id == eventId);
-                    
+                    string path = _webHostEnvironment.WebRootPath + "\\users-images\\";
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    string fileName = fileUpload.files.FileName;
+                    string extension = Path.GetExtension(fileUpload.files.FileName);
+                    string fullPath = Path.Combine(path, fileName + extension);
+
+                    using (FileStream fileStream = System.IO.File.Create(path + fileUpload.files.FileName))
+                    {
+                        fileUpload.files.CopyTo(fileStream);
+                        fileStream.Flush();
+                    }
+
+                    var userSearch = await _dbContextNessApp.Users.FindAsync(userId);
+                    if (userSearch != null)
+                    {
+                        userSearch.ImageUrl = fileName;
+                        await _dbContextNessApp.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return NotFound(new { Message = $"User with id {userId} was Not Found !" });
+                    }
+                    var uploadedFile = new UploadedFile
+                    {
+                        FileName = fileUpload.files.FileName,
+                        UploadDateTime = DateTime.Now,
+                        FileSize = fileUpload.files.Length,
+                        ImageUrl = "/users-images/" + fileUpload.files.FileName,
+                    };
+                    _dbContextNessApp.UploadedFiles.Add(uploadedFile);
+                    await _dbContextNessApp.SaveChangesAsync();
+                    return Ok("Upload Done !");
+                }
+                else
+                {
+                    return BadRequest("Image was not upload successfully!");
                 }
             }
-            return false;
+
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error !");
+            }
         }
+
+        [HttpGet("give-user-image")]
+        [Authorize] // Asigurați-vă că utilizatorul este autentificat pentru a accesa această resursă
+        public async Task<IActionResult> GetUserImage()
+        {  
+            // Obțineți ID-ul utilizatorului autentificat
+            var emailClaim = User.FindFirst(ClaimTypes.Email);
+
+            if (emailClaim == null)
+            {
+                return Unauthorized("Utilizatorul nu este autentificat.");
+            }
+
+            string userEmail = emailClaim.Value;
+
+            // Aici ar trebui să aveți o metodă sau un mecanism pentru a obține URL-ul imaginii asociate utilizatorului cu ID-ul specificat
+            // Presupunem că aveți o entitate User în baza de date cu un câmp ImageUrl care conține URL-ul imaginii utilizatorului
+
+            var user = await _dbContextNessApp.Users.FirstOrDefaultAsync(user=>user.Email==userEmail);
+
+            if (user != null && !string.IsNullOrEmpty(user.ImageUrl))
+            {
+                // Construiți calea completă către imagine
+                string path = _webHostEnvironment.WebRootPath + "\\users-images\\";
+                string imageUrl = user.ImageUrl;
+
+                // Combinați URL-ul imaginii cu extensia din ruta cererii
+                string fullImageUrl = Path.Combine(path, imageUrl);
+
+                if (System.IO.File.Exists(fullImageUrl))
+                {
+                    byte[] imageBytes = System.IO.File.ReadAllBytes(fullImageUrl);
+
+                    // Returnați imaginea cu tipul de conținut corect
+                    return File(imageBytes, "image/jpg"); // Modificați tipul de conținut la tipul adecvat imaginilor utilizate
+                }
+            }
+
+            return NotFound("Imaginea utilizatorului nu a fost găsită.");
+        }
+
     }
 }

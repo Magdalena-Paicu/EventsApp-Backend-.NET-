@@ -30,7 +30,6 @@
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\events-images\" />
     <Folder Include="wwwroot\uploads\" />
-    <Folder Include="wwwroot\user-images\" />
   </ItemGroup>
 
 </Project>

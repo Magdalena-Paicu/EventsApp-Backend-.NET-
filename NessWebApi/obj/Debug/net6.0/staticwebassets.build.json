@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "w2VTx9wEX9G5XE9rAWQoB4dcdeQjtcVCBRlv+RAupl8=",
+  "Hash": "62tHnJX6xmapVNphxWrmUX0CZ3ckqj+xYTW1VIemqqA=",
   "Source": "NessWebApi",
   "BasePath": "_content/NessWebApi",
   "Mode": "Default",
@@ -221,6 +221,23 @@
       "OriginalItemSpec": "wwwroot\\events-images\\9.jpg"
     },
     {
+      "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\imagine2.jpg",
+      "SourceId": "NessWebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\",
+      "BasePath": "_content/NessWebApi",
+      "RelativePath": "events-images/imagine2.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\events-images\\imagine2.jpg"
+    },
+    {
       "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\magda1.jpg",
       "SourceId": "NessWebApi",
       "SourceType": "Discovered",
@@ -236,6 +253,57 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\events-images\\magda1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda1.jpg",
+      "SourceId": "NessWebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\",
+      "BasePath": "_content/NessWebApi",
+      "RelativePath": "users-images/magda1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\users-images\\magda1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda2.jpg",
+      "SourceId": "NessWebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\",
+      "BasePath": "_content/NessWebApi",
+      "RelativePath": "users-images/magda2.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\users-images\\magda2.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda3.jpg",
+      "SourceId": "NessWebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\",
+      "BasePath": "_content/NessWebApi",
+      "RelativePath": "users-images/magda3.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\users-images\\magda3.jpg"
     }
   ]
 }

@@ -49,8 +49,24 @@
       "PackagePath": "staticwebassets\\events-images\\9.jpg"
     },
     {
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\imagine2.jpg",
+      "PackagePath": "staticwebassets\\events-images\\imagine2.jpg"
+    },
+    {
       "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\events-images\\magda1.jpg",
       "PackagePath": "staticwebassets\\events-images\\magda1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda1.jpg",
+      "PackagePath": "staticwebassets\\users-images\\magda1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda2.jpg",
+      "PackagePath": "staticwebassets\\users-images\\magda2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\P3720159\\Desktop\\NessLab\\NessLabs\\.NET-Ness-API\\NessWebApi\\NessWebApi\\wwwroot\\users-images\\magda3.jpg",
+      "PackagePath": "staticwebassets\\users-images\\magda3.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.NessWebApi.Microsoft.AspNetCore.StaticWebAssets.props",

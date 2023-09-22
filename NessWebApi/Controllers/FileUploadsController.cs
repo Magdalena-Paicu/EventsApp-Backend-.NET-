@@ -86,8 +86,8 @@ namespace NessWebApi.Controllers
         //    return NotFound("Fișierul nu a fost găsit.");
         //}
 
-        [HttpGet("{fileNameWithExtension}")]
-        public async Task<IActionResult> Get([FromRoute] string fileNameWithExtension)
+        [HttpGet("give-event-image/{fileNameWithExtension}")]
+        public async Task<IActionResult> GetEventImage([FromRoute] string fileNameWithExtension)
         {
             // Extrageți numele fișierului și extensia
             string fileName = Path.GetFileNameWithoutExtension(fileNameWithExtension);
@@ -101,6 +101,28 @@ namespace NessWebApi.Controllers
                 byte[] b = System.IO.File.ReadAllBytes(filePath);
                 // Construiți URL-ul cu numele fișierului și extensia corespunzătoare
                 string imageUrl = "/events-images/" + fileNameWithExtension;
+                return File(b, "image/" + extension);
+            }
+
+            return NotFound("Fișierul nu a fost găsit.");
+        }
+
+
+        [HttpGet("give-user-image/{fileNameWithExtension}")]
+        public async Task<IActionResult> GetUserImage([FromRoute] string fileNameWithExtension)
+        {
+            // Extrageți numele fișierului și extensia
+            string fileName = Path.GetFileNameWithoutExtension(fileNameWithExtension);
+            string extension = Path.GetExtension(fileNameWithExtension).ToLower();
+
+            string path = _webHostEnvironment.WebRootPath + "\\users-images\\";
+            string filePath = path + fileNameWithExtension;
+
+            if (System.IO.File.Exists(filePath))
+            {
+                byte[] b = System.IO.File.ReadAllBytes(filePath);
+                // Construiți URL-ul cu numele fișierului și extensia corespunzătoare
+                string imageUrl = "/users-images/" + fileNameWithExtension;
                 return File(b, "image/" + extension);
             }
 
